@@ -179,6 +179,38 @@ resource "azurerm_container_app" "container_app" {
         }
       }
     }
+
+    dynamic "init_container" {
+      for_each = each.value.template.init_containers
+
+      content {
+        cpu     = init_container.value.cpu
+        image   = init_container.value.image
+        memory  = init_container.value.memory
+        name    = init_container.value.name
+        args    = init_container.value.args
+        command = init_container.value.command
+
+        dynamic "env" {
+          for_each = init_container.value.env == null ? [] : init_container.value.env
+
+          content {
+            name        = env.value.name
+            secret_name = env.value.secret_name
+            value       = env.value.value
+          }
+        }
+        dynamic "volume_mounts" {
+          for_each = init_container.value.volume_mounts == null ? [] : [init_container.value.volume_mounts]
+
+          content {
+            name = volume_mounts.value.name
+            path = volume_mounts.value.path
+          }
+        }
+      }
+    }
+
     dynamic "volume" {
       for_each = each.value.template.volume == null ? [] : each.value.template.volume
 

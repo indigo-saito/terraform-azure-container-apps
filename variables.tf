@@ -69,6 +69,23 @@ variable "container_apps" {
           path = string
         }))
       }))
+      init_containers = set(object({
+        name    = string
+        image   = string
+        args    = optional(list(string))
+        command = optional(list(string))
+        cpu     = string
+        memory  = string
+        env = optional(set(object({
+          name        = string
+          secret_name = optional(string)
+          value       = optional(string)
+        })))
+        volume_mounts = optional(object({
+          name = string
+          path = string
+        }))
+      }))
       max_replicas    = optional(number)
       min_replicas    = optional(number)
       revision_suffix = optional(string)
