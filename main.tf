@@ -181,7 +181,7 @@ resource "azurerm_container_app" "container_app" {
     }
 
     dynamic "init_container" {
-      for_each = each.value.template.init_containers
+      for_each = each.value.template.init_containers == null ? [] : each.value.template.init_containers
 
       content {
         cpu     = init_container.value.cpu
@@ -201,7 +201,7 @@ resource "azurerm_container_app" "container_app" {
           }
         }
         dynamic "volume_mounts" {
-          for_each = init_container.value.volume_mounts == null ? [] : [init_container.value.volume_mounts]
+          for_each = init_container.value.volume_mounts == null ? [] : init_container.value.volume_mounts
 
           content {
             name = volume_mounts.value.name
