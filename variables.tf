@@ -64,10 +64,10 @@ variable "container_apps" {
           timeout          = optional(number)
           transport        = string
         }))
-        volume_mounts = optional(object({
+        volume_mounts = optional(set(object({
           name = string
           path = string
-        }))
+        })))
       }))
       init_containers = set(object({
         name    = string
